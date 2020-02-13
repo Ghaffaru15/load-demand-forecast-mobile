@@ -96,8 +96,8 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
 
   @override
   void didUpdateWidget(RealTimeHourly oldWidget) {
-    //makePrediction();
-    //Timer.periodic(Duration(minutes: 30), (Timer t) => makePrediction());
+    // makePrediction();
+    // Timer.periodic(Duration(minutes: 30), (Timer t) => makePrediction());
     super.didUpdateWidget(oldWidget);
   }
 
