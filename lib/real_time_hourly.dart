@@ -217,7 +217,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
         ),
       ),
       appBar: AppBar(
-        title: Text('Load Demand Forecast'),
+        title: Text('Load Demand Forecast', style: TextStyle(color: Colors.white)),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -234,7 +234,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                       child: Text(
                         'Hourly Forecast',
                         style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold),
+                            fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       padding: EdgeInsets.all(15.0),
                     ),
@@ -261,12 +261,12 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                           Text(
                             prediction != null ? prediction.toString() : '',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 100.0),
+                                fontWeight: FontWeight.bold, fontSize: 100.0, color: Colors.white),
                           ),
                           Text(
                             'MegaWatt',
                             style: TextStyle(
-                                fontSize: 40.0, fontWeight: FontWeight.bold),
+                                fontSize: 40.0, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                           Text(
                             'Load forecast today ' +
@@ -274,7 +274,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                                 ' ' +
                                 _timeString,
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 22.0),
+                            style: TextStyle(fontSize: 22.0, color: Colors.white),
                           )
                         ],
                       ),
@@ -288,7 +288,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                             child: Text(
                               'TODAY',
                               style: TextStyle(
-                                  fontSize: 25.0, fontWeight: FontWeight.bold),
+                                  fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
                           color: Color(0xFFEB1555),
@@ -298,7 +298,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                         ),
                       ),
                       SizedBox(
-                        width: size.width * 0.1,
+                        width: size.width * 0.06,
                       ),
                       GestureDetector(
                         child: Container(
@@ -306,12 +306,12 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                             child: Text(
                               'THIS MONTH',
                               style: TextStyle(
-                                  fontSize: 25.0, fontWeight: FontWeight.bold),
+                                  fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
                           color: Color(0xFFEB1555),
                           margin: EdgeInsets.only(top: 5.0),
-                          width: size.width * 0.45,
+                          width: size.width * 0.49,
                           height: 60.0,
                         ),
                       )

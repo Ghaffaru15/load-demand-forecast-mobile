@@ -49,7 +49,7 @@ class _ShortTermForecastState extends State<ShortTermForecast> {
     print(jsonData);
 
     final http.Response response = await http.post(
-        'http://10.0.2.2:5000/api/predict/hourly',
+        'https://load-demand-forecast.herokuapp.com/api/predict/hourly',
         headers: {
           'Content-Type': 'application/json',
           'accept': 'application/json'
