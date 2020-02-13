@@ -5,6 +5,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'short_term_forecast.dart';
 
 class RealTimeHourly extends StatefulWidget {
   @override
@@ -94,6 +95,13 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
   }
 
   @override
+  void didUpdateWidget(RealTimeHourly oldWidget) {
+    //makePrediction();
+    //Timer.periodic(Duration(minutes: 30), (Timer t) => makePrediction());
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     var timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     timer.cancel();
@@ -118,21 +126,29 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                 color: Color(0xFF0A0E21),
               ),
               ListTile(
-                  title: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.timer,
-                    color: Colors.white,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0),
-                    child: Text(
-                      'Short Term Forecast',
-                      style: TextStyle(color: Colors.white),
+                title: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.timer,
+                      color: Colors.white,
                     ),
-                  )
-                ],
-              )),
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: Text(
+                        'Short Term Forecast',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+                onTap: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              ShortTermForecast()))
+                },
+              ),
               Divider(
                 height: 10,
                 color: Color(0xFF0A0E21),
@@ -190,7 +206,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                   Padding(
                     padding: EdgeInsets.only(left: 25.0),
                     child: Text(
-                      'Authors',
+                      'Developers',
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -319,7 +335,7 @@ Widget createHeader() {
         Positioned(
             bottom: 12.0,
             left: 16.0,
-            child: Text("Manual Prediction",
+            child: Text("Machine Learning Predictions",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
