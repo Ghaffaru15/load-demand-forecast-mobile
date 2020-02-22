@@ -6,19 +6,21 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'short_term_forecast.dart';
-import 'real_time_daily.dart';
+import 'real_time_hourly.dart';
 import 'medium_term_forecast.dart';
-class RealTimeHourly extends StatefulWidget {
+
+class RealTimeDaily extends StatefulWidget {
   @override
-  _RealTimeHourlyState createState() => _RealTimeHourlyState();
+  _RealTimeDailyState createState() => _RealTimeDailyState();
 }
 
-class _RealTimeHourlyState extends State<RealTimeHourly> {
+class _RealTimeDailyState extends State<RealTimeDaily> {
   bool showSpinner;
 
   var now = DateTime.now();
   int humidity;
   double temperature;
+  double pressure;
 
   double prediction;
 
@@ -40,19 +42,20 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
     setState(() {
       temperature = roundDouble((temp['main']['temp'] - 273.15), 2);
       humidity = temp['main']['humidity'];
+      pressure = roundDouble(temp['main']['pressure'].toDouble(), 2);
     });
 
     var data = {
       "day": DateTime.now().day,
-      "hour": DateTime.now().hour,
       "month": DateTime.now().month,
       "humidity": humidity,
-      "temperature": temperature
+      "temperature": temperature,
+      "pressure": pressure
     };
     var jsonData = json.encode(data);
 
     final http.Response response2 = await http.post(
-        'https://load-demand-forecast.herokuapp.com/api/predict/hourly',
+        'https://load-demand-forecast.herokuapp.com/api/predict/daily',
         headers: {
           'Content-Type': 'application/json',
           'accept': 'application/json'
@@ -90,13 +93,13 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
 
     print(showSpinner);
     makePrediction();
-//    Timer.periodic(Duration(minutes: 30), (Timer t) => makePrediction());
+    Timer.periodic(Duration(minutes: 30), (Timer t) => makePrediction());
 //    Timer.periodic(Duration(), callback)
     super.initState();
   }
 
   @override
-  void didUpdateWidget(RealTimeHourly oldWidget) {
+  void didUpdateWidget(RealTimeDaily oldWidget) {
     // makePrediction();
     // Timer.periodic(Duration(minutes: 30), (Timer t) => makePrediction());
     super.didUpdateWidget(oldWidget);
@@ -156,28 +159,27 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
               ),
               ListTile(
                   onTap: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                MediumTermForecast()))
-                  },
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MediumTermForecast()))
+                      },
                   title: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.timer,
-                    color: Colors.white,
-                  ),
-                  Padding(
-
-                    padding: EdgeInsets.only(left: 25.0),
-                    child: Text(
-                      'Medium Term Forecast',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
-              )),
+                    children: <Widget>[
+                      Icon(
+                        Icons.timer,
+                        color: Colors.white,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 25.0),
+                        child: Text(
+                          'Medium Term Forecast',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  )),
               Divider(
                 height: 10,
                 color: Color(0xFF0A0E21),
@@ -226,7 +228,8 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
         ),
       ),
       appBar: AppBar(
-        title: Text('Load Demand Forecast', style: TextStyle(color: Colors.white)),
+        title:
+            Text('Load Demand Forecast', style: TextStyle(color: Colors.white)),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -241,9 +244,11 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                     child: Container(
                       alignment: Alignment.bottomLeft,
                       child: Text(
-                        'Hourly Forecast, Sunyani',
+                        'Daily Forecast, Sunyani',
                         style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                       padding: EdgeInsets.all(15.0),
                     ),
@@ -270,20 +275,24 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                           Text(
                             prediction != null ? prediction.toString() : '',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 100.0, color: Colors.white),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 100.0,
+                                color: Colors.white),
                           ),
                           Text(
                             'MegaWatt',
                             style: TextStyle(
-                                fontSize: 40.0, fontWeight: FontWeight.bold, color: Colors.white),
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                           Text(
                             'Load forecast today ' +
                                 DateFormat.yMMMMEEEEd().format(DateTime.now()) +
-                                ' ' +
-                                _timeString,
+                                ' ',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 22.0, color: Colors.white),
+                            style:
+                                TextStyle(fontSize: 22.0, color: Colors.white),
                           )
                         ],
                       ),
@@ -293,15 +302,20 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () => {
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => RealTimeDaily()))
+                          Navigator.push(
+                              context,
+                              (MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      RealTimeHourly())))
                         },
-
                         child: Container(
                           child: Center(
                             child: Text(
-                              'DAILY',
+                              'HOURLY',
                               style: TextStyle(
-                                  fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                           ),
                           color: Color(0xFFEB1555),
@@ -319,7 +333,9 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                             child: Text(
                               'MONTHLY',
                               style: TextStyle(
-                                  fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                           ),
                           color: Color(0xFFEB1555),
