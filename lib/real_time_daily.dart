@@ -266,7 +266,8 @@ class _RealTimeDailyState extends State<RealTimeDaily> {
                         children: <Widget>[
                           Text(
 //                              DateFormat.jm().format(DateTime.now()),
-                            _timeString != null ? _timeString : '',
+//                            _timeString != null ? _timeString : '',
+                            'AI Prediction',
                             style: TextStyle(
                                 color: Color(0xFF24D876),
                                 fontSize: 22.0,

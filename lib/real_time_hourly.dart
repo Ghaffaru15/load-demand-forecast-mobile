@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'short_term_forecast.dart';
 import 'real_time_daily.dart';
 import 'medium_term_forecast.dart';
+import 'hourly_trends.dart';
 class RealTimeHourly extends StatefulWidget {
   @override
   _RealTimeHourlyState createState() => _RealTimeHourlyState();
@@ -201,6 +202,27 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
               Divider(
                 height: 10,
                 color: Color(0xFF0A0E21),
+              ),
+              ListTile(
+                onTap: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              HourlyTrends()))
+                },
+                title: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.trending_up,
+                      color:Colors.white
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: Text('Trends', style: TextStyle(color: Colors.white)),
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 height: 50,
