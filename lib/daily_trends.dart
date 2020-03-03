@@ -5,59 +5,56 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'daily_trends.dart';
-
-class HourlyTrends extends StatefulWidget {
+import 'hourly_trends.dart';
+class DailyTrends extends StatefulWidget {
   @override
-  _HourlyTrendsState createState() => _HourlyTrendsState();
+  _DailyTrendsState createState() => _DailyTrendsState();
 }
 
-class _HourlyTrendsState extends State<HourlyTrends> {
-  final format = DateFormat("yyyy-MM-dd");
+class _DailyTrendsState extends State<DailyTrends> {
+  final format = DateFormat("yyyy-MM");
   bool showSpinner;
-  DateTime chosenDate;
+  DateTime chosenDate = DateTime.now();
 //  List<charts.Series> _seriesLineData;
-  List<charts.Series<HourlyPrediction, int>> _seriesLineData;
+  List<charts.Series<DailyPrediction, int>> _seriesLineData;
 //  List<HourlyPrediction> hourlyPredictionData = [];
-  var hourlyPredictionData = [];
+  var dailyPredictiondata = [];
 
-  Future fetchHourlyPredictions() async {
+  Future fetchDailyPredictions() async {
     var date = DateTime.now();
 
     var response = await http.get(
-        'http://10.0.2.2:5000/api/hourly/predictions/' +
+        'http://10.0.2.2:5000/api/daily/predictions/' +
             date.year.toString() +
             '/' +
-            date.month.toString() +
-            '/' +
-            date.day.toString());
+            date.month.toString());
 
-    List<HourlyPrediction> hourlyPredictionsData = [];
+    List<DailyPrediction> dailyPredictionsData = [];
     var responseData = jsonDecode(response.body);
-    for (var i = 0; i < jsonDecode(response.body)['hours'].length; i++) {
-      hourlyPredictionsData.add(new HourlyPrediction(
-          responseData['hours'][i].toInt(), responseData['predictions'][i]));
+    for (var i = 0; i < jsonDecode(response.body)['days'].length; i++) {
+      dailyPredictionsData.add(new DailyPrediction(
+          responseData['days'][i].toInt(), responseData['predictions'][i]));
     }
     print(responseData);
     setState(() {
-      hourlyPredictionData = hourlyPredictionsData;
+      dailyPredictiondata = dailyPredictionsData;
     });
 
-    print(hourlyPredictionData);
+    print(dailyPredictiondata);
 
     var samplehourlyPredictionData = [
-      new HourlyPrediction(1, 5),
-      new HourlyPrediction(2, 4)
+      new DailyPrediction(1, 5),
+      new DailyPrediction(2, 4)
     ];
 //    List<HourlyPrediction> hourlyPredictionData = [];
     setState(() {
-      _seriesLineData.add(charts.Series<HourlyPrediction, int>(
+      _seriesLineData.add(charts.Series<DailyPrediction, int>(
           colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
           id: 'Air Pollution',
-          data: hourlyPredictionData,
-          domainFn: (HourlyPrediction hourlyPrediction, _) =>
-              hourlyPrediction.hour,
-          measureFn: (HourlyPrediction hourlyPrediction, _) =>
+          data: dailyPredictiondata,
+          domainFn: (DailyPrediction hourlyPrediction, _) =>
+              hourlyPrediction.day,
+          measureFn: (DailyPrediction hourlyPrediction, _) =>
               hourlyPrediction.prediction));
     });
     print(_seriesLineData);
@@ -68,35 +65,33 @@ class _HourlyTrendsState extends State<HourlyTrends> {
       showSpinner = true;
     });
     final http.Response response = await http.get(
-        'http://10.0.2.2:5000/api/hourly/predictions/' +
+        'http://10.0.2.2:5000/api/daily/predictions/' +
             chosenDate.year.toString() +
             '/' +
-            chosenDate.month.toString() +
-            '/' +
-            chosenDate.day.toString());
+            chosenDate.month.toString());
 
     print(response.body);
 
-    List<HourlyPrediction> hourlyPredictionsData = [];
+    List<DailyPrediction> dailyPredictionsData = [];
     var responseData = jsonDecode(response.body);
-    for (var i = 0; i < jsonDecode(response.body)['hours'].length; i++) {
-      hourlyPredictionsData.add(new HourlyPrediction(
-          responseData['hours'][i].toInt(), responseData['predictions'][i]));
+    for (var i = 0; i < jsonDecode(response.body)['days'].length; i++) {
+      dailyPredictionsData.add(new DailyPrediction(
+          responseData['days'][i].toInt(), responseData['predictions'][i]));
     }
     print(responseData);
     setState(() {
-      hourlyPredictionData = hourlyPredictionsData;
+      dailyPredictiondata = dailyPredictionsData;
     });
 
     setState(() {
       _seriesLineData = [];
-      _seriesLineData.add(charts.Series<HourlyPrediction, int>(
+      _seriesLineData.add(charts.Series<DailyPrediction, int>(
           colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
           id: 'Air Pollution',
-          data: hourlyPredictionData,
-          domainFn: (HourlyPrediction hourlyPrediction, _) =>
-              hourlyPrediction.hour,
-          measureFn: (HourlyPrediction hourlyPrediction, _) =>
+          data: dailyPredictiondata,
+          domainFn: (DailyPrediction hourlyPrediction, _) =>
+              hourlyPrediction.day,
+          measureFn: (DailyPrediction hourlyPrediction, _) =>
               hourlyPrediction.prediction));
 
       showSpinner = false;
@@ -107,17 +102,17 @@ class _HourlyTrendsState extends State<HourlyTrends> {
   void initState() {
     super.initState();
     showSpinner = false;
-    _seriesLineData = List<charts.Series<HourlyPrediction, int>>();
-    fetchHourlyPredictions();
+    _seriesLineData = List<charts.Series<DailyPrediction, int>>();
+    fetchDailyPredictions();
 //    _generateData();
   }
 
   @override
-  void didUpdateWidget(HourlyTrends oldWidget) {
+  void didUpdateWidget(DailyTrends oldWidget) {
     // TODO: implement didUpdateWidget
-    _seriesLineData = List<charts.Series<HourlyPrediction, int>>();
+    _seriesLineData = List<charts.Series<DailyPrediction, int>>();
 
-    fetchHourlyPredictions();
+    fetchDailyPredictions();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -126,7 +121,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Trends'),
+          title: Text('Daily Trends'),
           actions: <Widget>[
             PopupMenuButton(
               itemBuilder: (BuildContext context) {
@@ -134,14 +129,13 @@ class _HourlyTrendsState extends State<HourlyTrends> {
 //                  PopupMenuItem(child: Text(''),),
                   PopupMenuItem(
                       child: MaterialButton(
-                          child: Text('Daily Trend'),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        DailyTrends()));
-                          })),
+                          child: Text('Hourly Trend'), onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    HourlyTrends()));
+                      })),
                 ];
               },
             )
@@ -160,7 +154,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
 //        child: Center(
                   child: Column(
                     children: <Widget>[
-                      Text('Select Day'),
+                      Text('Select Month'),
                       DateTimeField(
                         onChanged: (DateTime value) {
                           setState(() {
@@ -202,8 +196,8 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                         height: 5,
                       ),
                       Text(
-                        'Hourly Predictions today ' +
-                            DateFormat.yMMMMEEEEd().format(DateTime.now()),
+                        'Daily Predictions this month, ' +
+                            DateFormat.yMMMM().format(chosenDate),
                         style: TextStyle(
                             fontSize: 14.0, fontWeight: FontWeight.bold),
                       ),
@@ -213,7 +207,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                           animate: true,
                           animationDuration: Duration(seconds: 2),
                           behaviors: [
-                            new charts.ChartTitle('Hours',
+                            new charts.ChartTitle('Days',
                                 behaviorPosition:
                                     charts.BehaviorPosition.bottom,
                                 titleOutsideJustification:
@@ -238,9 +232,9 @@ class _HourlyTrendsState extends State<HourlyTrends> {
   }
 }
 
-class HourlyPrediction {
-  int hour;
+class DailyPrediction {
+  int day;
   double prediction;
 
-  HourlyPrediction(this.hour, this.prediction);
+  DailyPrediction(this.day, this.prediction);
 }
