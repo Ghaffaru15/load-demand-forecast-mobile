@@ -29,6 +29,8 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   charts_flutter: ^0.8.1
 
+  syncfusion_flutter_charts: ^1.0.0-beta.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

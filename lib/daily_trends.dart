@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'hourly_trends.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 class DailyTrends extends StatefulWidget {
   @override
   _DailyTrendsState createState() => _DailyTrendsState();
@@ -122,7 +123,7 @@ class _DailyTrendsState extends State<DailyTrends> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Daily Trends'),
+          title: Text('Daily Past Forecasts'),
           actions: <Widget>[
             PopupMenuButton(
               itemBuilder: (BuildContext context) {
@@ -130,7 +131,7 @@ class _DailyTrendsState extends State<DailyTrends> {
 //                  PopupMenuItem(child: Text(''),),
                   PopupMenuItem(
                       child: MaterialButton(
-                          child: Text('Hourly Trend'), onPressed: () {
+                          child: Text('Hourly Past Forecasts'), onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -144,7 +145,7 @@ class _DailyTrendsState extends State<DailyTrends> {
         ),
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
-          child: _seriesLineData.length > 0
+          child: dailyPredictiondata.length > 0
               ?
 //        ListView(children: <Widget>[
 //                DateTimeField(
@@ -203,22 +204,51 @@ class _DailyTrendsState extends State<DailyTrends> {
                             fontSize: 14.0, fontWeight: FontWeight.bold),
                       ),
                       Expanded(
-                        child: charts.LineChart(
-                          _seriesLineData,
-                          animate: true,
-                          animationDuration: Duration(seconds: 2),
-                          behaviors: [
-                            new charts.ChartTitle('Days',
-                                behaviorPosition:
-                                    charts.BehaviorPosition.bottom,
-                                titleOutsideJustification:
-                                    charts.OutsideJustification.middleDrawArea),
-                            new charts.ChartTitle('Power',
-                                behaviorPosition: charts.BehaviorPosition.start,
-                                titleOutsideJustification:
-                                    charts.OutsideJustification.middleDrawArea),
-                          ],
+                        child: SfCartesianChart(
+
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                            primaryXAxis: NumericAxis(
+                              interval: 1,
+                              visibleMinimum: 1,
+                              visibleMaximum: 31,
+                              title: AxisTitle(
+                                text: 'Time (Day)',
+                              ),
+
+                            ),
+                            primaryYAxis: NumericAxis(
+                                title: AxisTitle(
+                                    text: 'Power (MW)'
+                                )
+                            ),
+                            series: <ChartSeries>[
+                              LineSeries<DailyPrediction, int>(
+                                  yAxisName: 'Power',
+                                  xAxisName: 'Day',
+
+                                  enableTooltip: true,
+                                  dataSource: dailyPredictiondata,
+                                  xValueMapper: (DailyPrediction prediction, _) => prediction.day,
+                                  yValueMapper: (DailyPrediction prediction, _) => prediction.prediction
+                              )
+                            ]
                         ),
+//                        child: charts.LineChart(
+//                          _seriesLineData,
+//                          animate: true,
+//                          animationDuration: Duration(seconds: 2),
+//                          behaviors: [
+//                            new charts.ChartTitle('Days',
+//                                behaviorPosition:
+//                                    charts.BehaviorPosition.bottom,
+//                                titleOutsideJustification:
+//                                    charts.OutsideJustification.middleDrawArea),
+//                            new charts.ChartTitle('Power',
+//                                behaviorPosition: charts.BehaviorPosition.start,
+//                                titleOutsideJustification:
+//                                    charts.OutsideJustification.middleDrawArea),
+//                          ],
+//                        ),
                       )
                     ],
                   ),

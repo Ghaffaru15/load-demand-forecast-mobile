@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'daily_trends.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HourlyTrends extends StatefulWidget {
   @override
@@ -51,14 +52,22 @@ class _HourlyTrendsState extends State<HourlyTrends> {
     ];
 //    List<HourlyPrediction> hourlyPredictionData = [];
     setState(() {
-      _seriesLineData.add(charts.Series<HourlyPrediction, int>(
-          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
-          id: 'Air Pollution',
-          data: hourlyPredictionData,
-          domainFn: (HourlyPrediction hourlyPrediction, _) =>
-              hourlyPrediction.hour,
-          measureFn: (HourlyPrediction hourlyPrediction, _) =>
-              hourlyPrediction.prediction));
+//      _seriesLineData.add(charts.Series<HourlyPrediction, int>(
+//          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
+//          id: 'Air Pollution',
+//          data: hourlyPredictionData,
+//          domainFn: (HourlyPrediction hourlyPrediction, _) =>
+//              hourlyPrediction.hour,
+//          measureFn: (HourlyPrediction hourlyPrediction, _) =>
+//              hourlyPrediction.prediction));
+//      _seriesLineData.add(ChartSeries<HourlyPrediction, int>(
+//          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
+//          id: 'Air Pollution',
+//          data: hourlyPredictionData,
+//          domainFn: (HourlyPrediction hourlyPrediction, _) =>
+//          hourlyPrediction.hour,
+//          measureFn: (HourlyPrediction hourlyPrediction, _) =>
+//          hourlyPrediction.prediction));
       showSpinner = false;
     });
     print(_seriesLineData);
@@ -127,7 +136,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Trends'),
+          title: Text('Hourly Past Forecasts'),
           actions: <Widget>[
             PopupMenuButton(
               itemBuilder: (BuildContext context) {
@@ -135,7 +144,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
 
                   PopupMenuItem(
                       child: MaterialButton(
-                          child: Text('Daily Trend'),
+                          child: Text('Daily Past Forecasts'),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -150,7 +159,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
         ),
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
-          child: _seriesLineData.length > 0
+          child: hourlyPredictionData.length > 0
               ?
 //        ListView(children: <Widget>[
 //                DateTimeField(
@@ -209,22 +218,101 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                             fontSize: 14.0, fontWeight: FontWeight.bold),
                       ),
                       Expanded(
-                        child: charts.LineChart(
-                          _seriesLineData,
-                          animate: true,
-                          animationDuration: Duration(seconds: 2),
-                          behaviors: [
-                            new charts.ChartTitle('Hours',
-                                behaviorPosition:
-                                    charts.BehaviorPosition.bottom,
-                                titleOutsideJustification:
-                                    charts.OutsideJustification.middleDrawArea),
-                            new charts.ChartTitle('Power',
-                                behaviorPosition: charts.BehaviorPosition.start,
-                                titleOutsideJustification:
-                                    charts.OutsideJustification.middleDrawArea),
-                          ],
-                        ),
+                          child: SfCartesianChart(
+
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                              primaryXAxis: NumericAxis(
+                                interval: 1,
+                                visibleMinimum: 0,
+                                visibleMaximum: 23,
+                                title: AxisTitle(
+                                  text: 'Time (Hours)',
+                                ),
+
+                              ),
+                            primaryYAxis: NumericAxis(
+                              title: AxisTitle(
+                                text: 'Power (MW)'
+                              )
+                            ),
+                            series: <ChartSeries>[
+                              LineSeries<HourlyPrediction, int>(
+                                yAxisName: 'Power',
+                                xAxisName: 'Hour',
+
+                                enableTooltip: true,
+                                dataSource: hourlyPredictionData,
+                                xValueMapper: (HourlyPrediction prediction, _) => prediction.hour,
+                                yValueMapper: (HourlyPrediction prediction, _) => prediction.prediction
+                              )
+                            ]
+                          ),
+//                        child: charts.LineChart(
+//
+//                          _seriesLineData,
+//                          animate: true,
+//                          domainAxis: new charts.NumericAxisSpec(
+//                            tickProviderSpec: new charts.StaticNumericTickProviderSpec(
+//                              <charts.TickSpec<num>>[
+//                                charts.TickSpec<num>(0),
+//                                charts.TickSpec<num>(1),
+//
+//                                charts.TickSpec<num>(2),
+//                                charts.TickSpec<num>(3),
+//                                charts.TickSpec<num>(4),
+//                                charts.TickSpec<num>(5),
+//                                charts.TickSpec<num>(6),
+//                                charts.TickSpec<num>(7),
+//                                charts.TickSpec<num>(8),
+//                                charts.TickSpec<num>(9),
+//                                charts.TickSpec<num>(10),
+//                                charts.TickSpec<num>(11),
+//                                charts.TickSpec<num>(12),
+//                                charts.TickSpec<num>(13),
+//                                charts.TickSpec<num>(14),
+//                                charts.TickSpec<num>(15),
+//                                charts.TickSpec<num>(16),
+//                                charts.TickSpec<num>(17),
+//                                charts.TickSpec<num>(18),
+//                                charts.TickSpec<num>(19),
+//                                charts.TickSpec<num>(20),
+//                                charts.TickSpec<num>(21),
+//                                charts.TickSpec<num>(22),
+//                                charts.TickSpec<num>(23),
+////                                charts.TickSpec<num>(24)
+//                              ],
+//                            ),
+//                          ),
+//                          animationDuration: Duration(seconds: 2),
+//                          defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+//                          behaviors: [
+//
+//                            new charts.ChartTitle('Hours',
+//
+//
+//                                behaviorPosition:
+//                                    charts.BehaviorPosition.bottom,
+//                                titleOutsideJustification:
+//                                    charts.OutsideJustification.middleDrawArea,
+//                            ),
+//                            new charts.ChartTitle('Power',
+//                                behaviorPosition: charts.BehaviorPosition.start,
+//                                titleOutsideJustification:
+//                                    charts.OutsideJustification.middleDrawArea),
+//                            new charts.LinePointHighlighter(
+//                                showHorizontalFollowLine:
+//                                charts.LinePointHighlighterFollowLineType.none,
+//                                showVerticalFollowLine:
+//                                charts.LinePointHighlighterFollowLineType.nearest),
+//                            // Optional - By default, select nearest is configured to trigger
+//                            // with tap so that a user can have pan/zoom behavior and line point
+//                            // highlighter. Changing the trigger to tap and drag allows the
+//                            // highlighter to follow the dragging gesture but it is not
+//                            // recommended to be used when pan/zoom behavior is enabled.
+//                            new charts.SelectNearest(eventTrigger: charts.SelectionTrigger.tapAndDrag)
+//                          ],
+//                        ),
+
                       )
                     ],
                   ),

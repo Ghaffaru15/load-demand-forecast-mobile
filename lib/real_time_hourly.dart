@@ -192,22 +192,22 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                 height: 10,
                 color: Color(0xFF0A0E21),
               ),
-              ListTile(
-                  title: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.timer,
-                    color: Colors.white,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0),
-                    child: Text(
-                      'Long Term Forecast',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
-              )),
+//              ListTile(
+//                  title: Row(
+//                children: <Widget>[
+//                  Icon(
+//                    Icons.timer,
+//                    color: Colors.white,
+//                  ),
+//                  Padding(
+//                    padding: EdgeInsets.only(left: 25.0),
+//                    child: Text(
+//                      'Long Term Forecast',
+//                      style: TextStyle(color: Colors.white),
+//                    ),
+//                  )
+//                ],
+//              )),
               Divider(
                 height: 10,
                 color: Color(0xFF0A0E21),
