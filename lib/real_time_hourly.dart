@@ -83,7 +83,16 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
       _timeString = formattedDateTime;
     });
   }
+  String _getTimeInterval(hour) {
+    TimeOfDay time = TimeOfDay(hour: hour, minute: 0);
 
+    if (time.period == DayPeriod.am) {
+      return time.hour.toString() + ':00 AM';
+    } else {
+      return (time.hour - 12).toString() + ':00 PM';
+    }
+
+  }
   @override
   void initState() {
     _timeString = _formatDateTime(DateTime.now());
@@ -219,7 +228,7 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 25.0),
-                      child: Text('Trends', style: TextStyle(color: Colors.white)),
+                      child: Text('Past Forecasts', style: TextStyle(color: Colors.white)),
                     )
                   ],
                 ),
@@ -282,8 +291,12 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(
+                              _getTimeInterval(DateTime.now().hour).toString() + ' - ' +
+                              _getTimeInterval(DateTime.now().hour + 1).toString(),
 //                              DateFormat.jm().format(DateTime.now()),
-                            _timeString != null ? _timeString : '',
+//                            _timeString != null ? _timeString : '',
+//                          TimeOfDay(hour: DateTime.now().hour, minute: 0).toString()
+//                              + ' - '  +   TimeOfDay(hour: DateTime.now().hour + 1, minute: 0).toString(),
                             style: TextStyle(
                                 color: Color(0xFF24D876),
                                 fontSize: 22.0,
@@ -321,35 +334,35 @@ class _RealTimeHourlyState extends State<RealTimeHourly> {
                         child: Container(
                           child: Center(
                             child: Text(
-                              'DAILY',
+                              'DAILY FORECAST',
                               style: TextStyle(
                                   fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
                           color: Color(0xFFEB1555),
                           margin: EdgeInsets.only(top: 5.0),
-                          width: size.width * 0.45,
+                          width: size.width * 1,
                           height: 60.0,
                         ),
                       ),
-                      SizedBox(
-                        width: size.width * 0.06,
-                      ),
-                      GestureDetector(
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              'MONTHLY',
-                              style: TextStyle(
-                                  fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                          ),
-                          color: Color(0xFFEB1555),
-                          margin: EdgeInsets.only(top: 5.0),
-                          width: size.width * 0.49,
-                          height: 60.0,
-                        ),
-                      )
+//                      SizedBox(
+//                        width: size.width * 0.06,
+//                      ),
+//                      GestureDetector(
+//                        child: Container(
+//                          child: Center(
+//                            child: Text(
+//                              'MONTHLY',
+//                              style: TextStyle(
+//                                  fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),
+//                            ),
+//                          ),
+//                          color: Color(0xFFEB1555),
+//                          margin: EdgeInsets.only(top: 5.0),
+//                          width: size.width * 0.49,
+//                          height: 60.0,
+//                        ),
+//                      )
                     ],
                   )
                 ],

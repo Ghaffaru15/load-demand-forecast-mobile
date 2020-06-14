@@ -24,7 +24,7 @@ class _DailyTrendsState extends State<DailyTrends> {
     var date = DateTime.now();
 
     var response = await http.get(
-        'http://10.0.2.2:5000/api/daily/predictions/' +
+        'https://load-demand-forecast.herokuapp.com/api/daily/predictions/' +
             date.year.toString() +
             '/' +
             date.month.toString());
@@ -56,6 +56,7 @@ class _DailyTrendsState extends State<DailyTrends> {
               hourlyPrediction.day,
           measureFn: (DailyPrediction hourlyPrediction, _) =>
               hourlyPrediction.prediction));
+      showSpinner = false;
     });
     print(_seriesLineData);
   }
@@ -65,7 +66,7 @@ class _DailyTrendsState extends State<DailyTrends> {
       showSpinner = true;
     });
     final http.Response response = await http.get(
-        'http://10.0.2.2:5000/api/daily/predictions/' +
+        'https://load-demand-forecast.herokuapp.com/api/daily/predictions/' +
             chosenDate.year.toString() +
             '/' +
             chosenDate.month.toString());
@@ -101,7 +102,7 @@ class _DailyTrendsState extends State<DailyTrends> {
   @override
   void initState() {
     super.initState();
-    showSpinner = false;
+    showSpinner = true;
     _seriesLineData = List<charts.Series<DailyPrediction, int>>();
     fetchDailyPredictions();
 //    _generateData();

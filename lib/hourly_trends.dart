@@ -25,7 +25,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
     var date = DateTime.now();
 
     var response = await http.get(
-        'http://10.0.2.2:5000/api/hourly/predictions/' +
+        'https://load-demand-forecast.herokuapp.com/api/hourly/predictions/' +
             date.year.toString() +
             '/' +
             date.month.toString() +
@@ -59,6 +59,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
               hourlyPrediction.hour,
           measureFn: (HourlyPrediction hourlyPrediction, _) =>
               hourlyPrediction.prediction));
+      showSpinner = false;
     });
     print(_seriesLineData);
   }
@@ -68,7 +69,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
       showSpinner = true;
     });
     final http.Response response = await http.get(
-        'http://10.0.2.2:5000/api/hourly/predictions/' +
+        'https://load-demand-forecast.herokuapp.com/api/hourly/predictions/' +
             chosenDate.year.toString() +
             '/' +
             chosenDate.month.toString() +
@@ -106,7 +107,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
   @override
   void initState() {
     super.initState();
-    showSpinner = false;
+    showSpinner = true;
     _seriesLineData = List<charts.Series<HourlyPrediction, int>>();
     fetchHourlyPredictions();
 //    _generateData();
@@ -131,7 +132,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
             PopupMenuButton(
               itemBuilder: (BuildContext context) {
                 return [
-//                  PopupMenuItem(child: Text(''),),
+
                   PopupMenuItem(
                       child: MaterialButton(
                           child: Text('Daily Trend'),

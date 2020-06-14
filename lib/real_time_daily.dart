@@ -267,7 +267,7 @@ class _RealTimeDailyState extends State<RealTimeDaily> {
                           Text(
 //                              DateFormat.jm().format(DateTime.now()),
 //                            _timeString != null ? _timeString : '',
-                            'AI Prediction',
+                            '12:00 AM - 11:59 PM',
                             style: TextStyle(
                                 color: Color(0xFF24D876),
                                 fontSize: 22.0,
@@ -312,7 +312,7 @@ class _RealTimeDailyState extends State<RealTimeDaily> {
                         child: Container(
                           child: Center(
                             child: Text(
-                              'HOURLY',
+                              'HOURLY FORECAST',
                               style: TextStyle(
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.bold,
@@ -321,30 +321,30 @@ class _RealTimeDailyState extends State<RealTimeDaily> {
                           ),
                           color: Color(0xFFEB1555),
                           margin: EdgeInsets.only(top: 5.0),
-                          width: size.width * 0.45,
+                          width: size.width * 1,
                           height: 60.0,
                         ),
                       ),
-                      SizedBox(
-                        width: size.width * 0.06,
-                      ),
-                      GestureDetector(
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              'MONTHLY',
-                              style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ),
-                          color: Color(0xFFEB1555),
-                          margin: EdgeInsets.only(top: 5.0),
-                          width: size.width * 0.49,
-                          height: 60.0,
-                        ),
-                      )
+//                      SizedBox(
+//                        width: size.width * 0.06,
+//                      ),
+//                      GestureDetector(
+//                        child: Container(
+//                          child: Center(
+//                            child: Text(
+//                              'MONTHLY',
+//                              style: TextStyle(
+//                                  fontSize: 25.0,
+//                                  fontWeight: FontWeight.bold,
+//                                  color: Colors.white),
+//                            ),
+//                          ),
+//                          color: Color(0xFFEB1555),
+//                          margin: EdgeInsets.only(top: 5.0),
+//                          width: size.width * 0.49,
+//                          height: 60.0,
+//                        ),
+//                      )
                     ],
                   )
                 ],
