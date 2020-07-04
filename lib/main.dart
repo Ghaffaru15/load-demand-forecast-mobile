@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'real_time_hourly.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MyApp(
+//  initialDate: DateTime.now(),
+));
 
 class MyApp extends StatefulWidget {
   @override

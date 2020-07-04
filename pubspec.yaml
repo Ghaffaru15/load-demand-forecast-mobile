@@ -30,6 +30,7 @@ dependencies:
   charts_flutter: ^0.8.1
 
   syncfusion_flutter_charts: ^1.0.0-beta.3
+  month_picker_dialog: ^0.3.0
 
 dev_dependencies:
   flutter_test:

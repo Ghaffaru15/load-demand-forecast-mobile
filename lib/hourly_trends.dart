@@ -116,6 +116,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
   @override
   void initState() {
     super.initState();
+    chosenDate = DateTime.now();
     showSpinner = true;
     _seriesLineData = List<charts.Series<HourlyPrediction, int>>();
     fetchHourlyPredictions();
@@ -159,12 +160,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
         ),
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
-          child: hourlyPredictionData.length > 0
-              ?
-//        ListView(children: <Widget>[
-//                DateTimeField(
-//
-//        ),
+          child:
               Padding(
                   padding: EdgeInsets.all(8),
 //        child: Center(
@@ -176,12 +172,15 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                           setState(() {
                             chosenDate = value;
                           });
-
                           getData();
                         },
                         validator: (DateTime value) {
                           if (value == null) {
                             return 'The date field is required';
+                          } else if (value.isAfter(DateTime.now())) {
+                            return 'The date must be less than today';
+                          } else {
+
                           }
 //                  return value;
                         },
@@ -200,7 +199,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                               context: context,
                               firstDate: DateTime(1900),
                               initialDate: DateTime.now(),
-                              lastDate: DateTime(2100));
+                              lastDate: DateTime.now());
                           if (date != null) {
                             return date;
                           } else {
@@ -213,11 +212,12 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                       ),
                       Text(
                         'Hourly Predictions today ' +
-                            DateFormat.yMMMMEEEEd().format(DateTime.now()),
+                            DateFormat.yMMMMEEEEd().format(chosenDate),
                         style: TextStyle(
                             fontSize: 14.0, fontWeight: FontWeight.bold),
                       ),
-                      Expanded(
+                      hourlyPredictionData.length > 0
+                          ?  Expanded(
                           child: SfCartesianChart(
 
                             tooltipBehavior: TooltipBehavior(enable: true),
@@ -247,80 +247,19 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                               )
                             ]
                           ),
-//                        child: charts.LineChart(
-//
-//                          _seriesLineData,
-//                          animate: true,
-//                          domainAxis: new charts.NumericAxisSpec(
-//                            tickProviderSpec: new charts.StaticNumericTickProviderSpec(
-//                              <charts.TickSpec<num>>[
-//                                charts.TickSpec<num>(0),
-//                                charts.TickSpec<num>(1),
-//
-//                                charts.TickSpec<num>(2),
-//                                charts.TickSpec<num>(3),
-//                                charts.TickSpec<num>(4),
-//                                charts.TickSpec<num>(5),
-//                                charts.TickSpec<num>(6),
-//                                charts.TickSpec<num>(7),
-//                                charts.TickSpec<num>(8),
-//                                charts.TickSpec<num>(9),
-//                                charts.TickSpec<num>(10),
-//                                charts.TickSpec<num>(11),
-//                                charts.TickSpec<num>(12),
-//                                charts.TickSpec<num>(13),
-//                                charts.TickSpec<num>(14),
-//                                charts.TickSpec<num>(15),
-//                                charts.TickSpec<num>(16),
-//                                charts.TickSpec<num>(17),
-//                                charts.TickSpec<num>(18),
-//                                charts.TickSpec<num>(19),
-//                                charts.TickSpec<num>(20),
-//                                charts.TickSpec<num>(21),
-//                                charts.TickSpec<num>(22),
-//                                charts.TickSpec<num>(23),
-////                                charts.TickSpec<num>(24)
-//                              ],
-//                            ),
-//                          ),
-//                          animationDuration: Duration(seconds: 2),
-//                          defaultRenderer: new charts.LineRendererConfig(includePoints: true),
-//                          behaviors: [
-//
-//                            new charts.ChartTitle('Hours',
-//
-//
-//                                behaviorPosition:
-//                                    charts.BehaviorPosition.bottom,
-//                                titleOutsideJustification:
-//                                    charts.OutsideJustification.middleDrawArea,
-//                            ),
-//                            new charts.ChartTitle('Power',
-//                                behaviorPosition: charts.BehaviorPosition.start,
-//                                titleOutsideJustification:
-//                                    charts.OutsideJustification.middleDrawArea),
-//                            new charts.LinePointHighlighter(
-//                                showHorizontalFollowLine:
-//                                charts.LinePointHighlighterFollowLineType.none,
-//                                showVerticalFollowLine:
-//                                charts.LinePointHighlighterFollowLineType.nearest),
-//                            // Optional - By default, select nearest is configured to trigger
-//                            // with tap so that a user can have pan/zoom behavior and line point
-//                            // highlighter. Changing the trigger to tap and drag allows the
-//                            // highlighter to follow the dragging gesture but it is not
-//                            // recommended to be used when pan/zoom behavior is enabled.
-//                            new charts.SelectNearest(eventTrigger: charts.SelectionTrigger.tapAndDrag)
-//                          ],
-//                        ),
-
+                      ) : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                            Center(
+                          child: Text('No Data'),
                       )
+                        ],
+                      ),
                     ],
                   ),
                 )
 //              ])
-              : Center(
-                  child: Text('No Data'),
-                ),
+
         )
 //      ),
         );

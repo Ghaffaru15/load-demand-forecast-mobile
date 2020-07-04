@@ -7,12 +7,31 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'hourly_trends.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
+
 class DailyTrends extends StatefulWidget {
+  final DateTime initialDate = DateTime.now();
+//  const DailyTrends({Key key, @required this.initialDate }) : super(key: key);
   @override
   _DailyTrendsState createState() => _DailyTrendsState();
 }
 
 class _DailyTrendsState extends State<DailyTrends> {
+
+  DateTime selectedDate;
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime.now());
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
   final format = DateFormat("yyyy-MM");
   bool showSpinner;
   DateTime chosenDate = DateTime.now();
@@ -36,17 +55,13 @@ class _DailyTrendsState extends State<DailyTrends> {
       dailyPredictionsData.add(new DailyPrediction(
           responseData['days'][i].toInt(), responseData['predictions'][i]));
     }
-    print(responseData);
+//    print(responseData);
     setState(() {
       dailyPredictiondata = dailyPredictionsData;
     });
 
     print(dailyPredictiondata);
 
-    var samplehourlyPredictionData = [
-      new DailyPrediction(1, 5),
-      new DailyPrediction(2, 4)
-    ];
 //    List<HourlyPrediction> hourlyPredictionData = [];
     setState(() {
       _seriesLineData.add(charts.Series<DailyPrediction, int>(
@@ -59,7 +74,7 @@ class _DailyTrendsState extends State<DailyTrends> {
               hourlyPrediction.prediction));
       showSpinner = false;
     });
-    print(_seriesLineData);
+//    print(_seriesLineData);
   }
 
   Future getData() async {
@@ -68,9 +83,9 @@ class _DailyTrendsState extends State<DailyTrends> {
     });
     final http.Response response = await http.get(
         'https://load-demand-forecast.herokuapp.com/api/daily/predictions/' +
-            chosenDate.year.toString() +
+            selectedDate.year.toString() +
             '/' +
-            chosenDate.month.toString());
+            selectedDate.month.toString());
 
     print(response.body);
 
@@ -104,8 +119,10 @@ class _DailyTrendsState extends State<DailyTrends> {
   void initState() {
     super.initState();
     showSpinner = true;
+
     _seriesLineData = List<charts.Series<DailyPrediction, int>>();
     fetchDailyPredictions();
+    selectedDate = DateTime.now();
 //    _generateData();
   }
 
@@ -156,50 +173,69 @@ class _DailyTrendsState extends State<DailyTrends> {
 //        child: Center(
                   child: Column(
                     children: <Widget>[
-                      Text('Select Month'),
-                      DateTimeField(
-                        onChanged: (DateTime value) {
-                          setState(() {
-                            chosenDate = value;
-                          });
-
-                          getData();
-                        },
-                        validator: (DateTime value) {
-                          if (value == null) {
-                            return 'The date field is required';
-                          }
-//                  return value;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hoverColor: Colors.white,
-//                          fillColor: Colors.white,
-                            prefixIcon: Icon(
-                              Icons.date_range,
-                              color: Colors.white,
-                            )),
-//                      style: TextStyle(color: Colors.white),
-                        format: format,
-                        onShowPicker: (context, currentValue) async {
-                          final date = await showDatePicker(
+//                      Text('Select Month'),
+                      RaisedButton(
+                        onPressed: () {
+                          showMonthPicker(
                               context: context,
-                              firstDate: DateTime(1900),
-                              initialDate: DateTime.now(),
-                              lastDate: DateTime(2100));
-                          if (date != null) {
-                            return date;
-                          } else {
-                            return currentValue;
-                          }
+                              firstDate: DateTime( DateTime.now().year - 1 , 5),
+                              lastDate: DateTime( DateTime.now().year + 1, 9 ),
+                              initialDate: selectedDate ?? widget.initialDate
+                          )
+                              .then((date) => setState(() {
+                            selectedDate = date;
+                            getData();
+                          })
+//
+                          );
+
                         },
+                        child: Text('Select Month'),
                       ),
+//                      DateTimeField(
+//
+//                        onChanged: (DateTime value) {
+//                          setState(() {
+//                            chosenDate = value;
+//                          });
+//
+//                          getData();
+//                        },
+//                        validator: (DateTime value) {
+//                          if (value == null) {
+//                            return 'The date field is required';
+//                          }
+////                  return value;
+//                        },
+//                        decoration: InputDecoration(
+//                            border: OutlineInputBorder(),
+//                            hoverColor: Colors.white,
+////                          fillColor: Colors.white,
+//                            prefixIcon: Icon(
+//                              Icons.date_range,
+//                              color: Colors.white,
+//                            )),
+////                      style: TextStyle(color: Colors.white),
+//                        format: format,
+//                        onShowPicker: (context, currentValue) async {
+//                          final date = await showDatePicker(
+//                              context: context,
+//                              firstDate: DateTime(1900),
+//                              initialDate: DateTime.now(),
+//                              lastDate: DateTime(2100));
+//                          if (date != null) {
+//                            return date;
+//                          } else {
+//                            return currentValue;
+//                          }
+//                        },
+//                      ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                        'Daily Predictions this month, ' +
-                            DateFormat.yMMMM().format(chosenDate),
+                        'Daily Predictions for the month of ' +
+                            DateFormat.yMMMM().format(selectedDate),
                         style: TextStyle(
                             fontSize: 14.0, fontWeight: FontWeight.bold),
                       ),

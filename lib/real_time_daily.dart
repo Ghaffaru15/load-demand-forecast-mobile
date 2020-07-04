@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'short_term_forecast.dart';
 import 'real_time_hourly.dart';
 import 'medium_term_forecast.dart';
+import 'daily_trends.dart';
 
 class RealTimeDaily extends StatefulWidget {
   @override
@@ -184,22 +185,47 @@ class _RealTimeDailyState extends State<RealTimeDaily> {
                 height: 10,
                 color: Color(0xFF0A0E21),
               ),
+//              ListTile(
+//                  title: Row(
+//                children: <Widget>[
+//                  Icon(
+//                    Icons.timer,
+//                    color: Colors.white,
+//                  ),
+//                  Padding(
+//                    padding: EdgeInsets.only(left: 25.0),
+//                    child: Text(
+//                      'Long Term Forecast',
+//                      style: TextStyle(color: Colors.white),
+//                    ),
+//                  )
+//                ],
+//              )),
+              Divider(
+                height: 10,
+                color: Color(0xFF0A0E21),
+              ),
               ListTile(
-                  title: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.timer,
-                    color: Colors.white,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0),
-                    child: Text(
-                      'Long Term Forecast',
-                      style: TextStyle(color: Colors.white),
+                onTap: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              DailyTrends()))
+                },
+                title: Row(
+                  children: <Widget>[
+                    Icon(
+                        Icons.trending_up,
+                        color:Colors.white
                     ),
-                  )
-                ],
-              )),
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: Text('Past Forecasts', style: TextStyle(color: Colors.white)),
+                    )
+                  ],
+                ),
+              ),
               Divider(
                 height: 10,
                 color: Color(0xFF0A0E21),
