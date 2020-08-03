@@ -197,7 +197,7 @@ class _HourlyTrendsState extends State<HourlyTrends> {
                         onShowPicker: (context, currentValue) async {
                           final date = await showDatePicker(
                               context: context,
-                              firstDate: DateTime(1900),
+                              firstDate: DateTime(2020,3,10),
                               initialDate: DateTime.now(),
                               lastDate: DateTime.now());
                           if (date != null) {

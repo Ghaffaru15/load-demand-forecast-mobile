@@ -20,6 +20,7 @@ class _DailyTrendsState extends State<DailyTrends> {
 
   DateTime selectedDate;
 
+
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -81,6 +82,12 @@ class _DailyTrendsState extends State<DailyTrends> {
     setState(() {
       showSpinner = true;
     });
+
+    if (selectedDate == null) {
+      setState(() {
+        selectedDate = DateTime.now();
+      });
+    }
     final http.Response response = await http.get(
         'https://load-demand-forecast.herokuapp.com/api/daily/predictions/' +
             selectedDate.year.toString() +
@@ -178,8 +185,10 @@ class _DailyTrendsState extends State<DailyTrends> {
                         onPressed: () {
                           showMonthPicker(
                               context: context,
-                              firstDate: DateTime( DateTime.now().year - 1 , 5),
-                              lastDate: DateTime( DateTime.now().year + 1, 9 ),
+//                              firstDate: DateTime( DateTime.now().year - 1 , 5),
+//                              lastDate: DateTime( DateTime.now().year + 1, 9 ),
+                                firstDate: DateTime(2020,3),
+                                lastDate: DateTime.now(),
                               initialDate: selectedDate ?? widget.initialDate
                           )
                               .then((date) => setState(() {

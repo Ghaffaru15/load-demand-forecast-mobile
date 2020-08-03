@@ -9,6 +9,7 @@ import 'short_term_forecast.dart';
 import 'real_time_hourly.dart';
 import 'medium_term_forecast.dart';
 import 'daily_trends.dart';
+import 'developers.dart';
 
 class RealTimeDaily extends StatefulWidget {
   @override
@@ -233,22 +234,29 @@ class _RealTimeDailyState extends State<RealTimeDaily> {
               SizedBox(
                 height: 50,
               ),
-              ListTile(
-                  title: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.people,
-                    color: Colors.white,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0),
-                    child: Text(
-                      'Developers',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
-              )),
+//              ListTile(
+//                  onTap: () => {
+//                    Navigator.push(
+//                        context,
+//                        MaterialPageRoute(
+//                            builder: (BuildContext context) =>
+//                                Developers()))
+//                  },
+//                  title: Row(
+//                children: <Widget>[
+//                  Icon(
+//                    Icons.people,
+//                    color: Colors.white,
+//                  ),
+//                  Padding(
+//                    padding: EdgeInsets.only(left: 25.0),
+//                    child: Text(
+//                      'Developers',
+//                      style: TextStyle(color: Colors.white),
+//                    ),
+//                  )
+//                ],
+//              )),
             ],
           ),
         ),
